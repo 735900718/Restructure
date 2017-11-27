@@ -1,12 +1,12 @@
 ﻿/**
- * 3.31更新
+ * 11.27更新
  */
 /*注册条件*/
 function checkval(obj){
 	var name   = obj.name;
 	var val    = obj.val;
 	var val2   = obj.val2;
-	var reg    = null || obj.reg;
+	var reg    = null || new RegExp(obj.reg);
 	var regErr = null || obj.regErr;
 	switch(name){
 		case "手机":
@@ -19,7 +19,7 @@ function checkval(obj){
 				return true;
 			}
 		case "姓名":
-			reg = reg || /^([\u4e00-\u9fa5]){1,6}}$/;
+			reg = reg || /^([\u4e00-\u9fa5]){1,6}$/;
 			if (val == "") {
 				return "请输入姓名";
 			}else if (!val.match(reg)){
@@ -72,8 +72,10 @@ function checkval(obj){
 }
 
 function checkthis() {
-	var obj = {}
-  obj.name = $(this).data('checkval');
+	var obj = {};
+	obj.name = $(this).data('checkval');
+	obj.reg = $(this).data('reg');
+	console.log(obj.reg);
   if (obj.name == '密码' || obj.name == '再次密码') {
     obj.val = $('[data-checkval="密码"]').val();
     obj.val2 = $('[data-checkval="再次密码"]').val();
@@ -94,8 +96,11 @@ function checkthis() {
     } else {
       $(this).css('border-color','#d6d7dc')
     }
-  }
+	}
 }
+
+$('[data-checkval]').blur(checkthis);
+
 //使用方法：
 // input 添加data-checkval='手机'属性
-// $('[data-checkval]').blur(checkthis)
+// input 可添加data-reg="^([\u4e00-\u9fa5]){2,6}$" 代替默认正则
